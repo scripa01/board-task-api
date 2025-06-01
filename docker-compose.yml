@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  board-db:
+    image: postgres:15
+    container_name: board-db
+    environment:
+      POSTGRES_DB: board-task
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456789
+    ports:
+      - "5433:5432"
+    volumes:
+      - board-db-data:/var/lib/postgresql/data
+
+  board-task-api:
+    build:
+      context: ./board-task-api
+    container_name: board-task-api
+    depends_on:
+      - board-db
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://board-db:5432/board-task
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456789
+
+volumes:
+  board-db-data:
