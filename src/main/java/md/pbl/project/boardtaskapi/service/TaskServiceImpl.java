@@ -28,8 +28,8 @@ public class TaskServiceImpl implements TaskService {
     private final ObjectMapper mapper;
     private static final Map<TaskStatus, Set<TaskStatus>> ALLOWED = Map.of(
             TaskStatus.OPEN, Set.of(TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.SCHEDULED),
-            TaskStatus.IN_PROGRESS, Set.of(TaskStatus.DONE, TaskStatus.RE_OPENED),
-            TaskStatus.SCHEDULED, Set.of(TaskStatus.IN_PROGRESS, TaskStatus.RE_OPENED),
+            TaskStatus.IN_PROGRESS, Set.of(TaskStatus.OPEN, TaskStatus.SCHEDULED, TaskStatus.DONE),
+            TaskStatus.SCHEDULED, Set.of(TaskStatus.IN_PROGRESS, TaskStatus.RE_OPENED, TaskStatus.DONE),
             TaskStatus.DONE, Set.of(TaskStatus.RE_OPENED),
             TaskStatus.RE_OPENED, Set.of(TaskStatus.IN_PROGRESS, TaskStatus.SCHEDULED)
     );
@@ -65,10 +65,12 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto create(TaskDto dto) throws PblCustomException {
         Board board = boardRepo.findById(dto.getBoardId())
                 .orElseThrow(() -> new PblCustomException("Board does not exist", ErrorCode.BOARD_DOESNT_EXIST, HttpStatus.NOT_FOUND));
+        dto.setStatus(TaskStatus.OPEN);
         Task entity = mapper.toEntity(dto);
         entity.setBoard(board);
-        taskAuditService.record(entity, dto.getCreatedByUserId(), TaskStatus.OPEN, TaskStatus.OPEN, "Create Task");
-        return mapper.toDto(taskRepo.save(entity));
+        Task savedTask = taskRepo.save(entity);
+        taskAuditService.record(savedTask, dto.getCreatedByUserId(), savedTask.getStatus(), savedTask.getStatus(), "Create Task");
+        return mapper.toDto(savedTask);
     }
 
     @Override
@@ -76,7 +78,7 @@ public class TaskServiceImpl implements TaskService {
         Task entity = taskRepo.findById(id)
                 .orElseThrow(() -> new PblCustomException("Task does not exist", ErrorCode.TASK_DOESNT_EXIST, HttpStatus.NOT_FOUND));
         mapper.updateEntityFromDto(dto, entity);
-        taskAuditService.record(entity, dto.getCreatedByUserId(), TaskStatus.OPEN, TaskStatus.OPEN, "Update Task");
+        taskAuditService.record(entity, dto.getCreatedByUserId(), entity.getStatus(), entity.getStatus(), "Update Task");
         return mapper.toDto(taskRepo.save(entity));
     }
 

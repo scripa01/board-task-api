@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import md.pbl.project.boardtaskapi.model.task.TaskDto;
 
-import java.util.List;
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
@@ -18,5 +17,5 @@ public class BoardDto {
     private String description;
     private Long organizationId;
     private Long projectId;
-    private List<TaskDto> tasks;
+    OffsetDateTime createdAt = OffsetDateTime.now();
 }

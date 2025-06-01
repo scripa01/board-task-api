@@ -36,6 +36,7 @@ public interface ObjectMapper {
     void updateEntityFromDto(TaskDto dto, @MappingTarget Task entity);
 
     // Comment
+    @Mapping(source = "comment.task.id", target = "taskId")
     CommentDto toDto(Comment comment);
 
     @Mapping(target = "task", source = "taskId", qualifiedByName = "mapTaskIdToTask")
@@ -52,7 +53,7 @@ public interface ObjectMapper {
 
     List<CommentDto> toCommentDtoList(List<Comment> comments);
 
-
+    @Mapping(source = "audit.task.id", target = "taskId")
     TaskAuditDto toTaskAuditDto(TaskAudit audit);
 
     TaskAudit toTaskAudit(TaskAuditDto dto);

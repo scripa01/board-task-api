@@ -16,5 +16,5 @@ public class CommentDto {
     private Long taskId;
     private Long userId;
     private String content;
-    private OffsetDateTime createdAt;
+    private OffsetDateTime createdAt = OffsetDateTime.now();
 }

@@ -75,7 +75,7 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}/status")
+    @PutMapping("/{id}/status")
     public ResponseEntity<TaskDto> changeStatus(
             @PathVariable Long orgId,
             @PathVariable Long projId,

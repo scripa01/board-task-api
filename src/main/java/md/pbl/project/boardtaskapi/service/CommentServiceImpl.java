@@ -5,7 +5,6 @@ import md.pbl.project.boardtaskapi.exceptions.PblCustomException;
 import md.pbl.project.boardtaskapi.model.ObjectMapper;
 import md.pbl.project.boardtaskapi.model.comment.Comment;
 import md.pbl.project.boardtaskapi.model.comment.CommentDto;
-import md.pbl.project.boardtaskapi.model.task.Task;
 import md.pbl.project.boardtaskapi.repository.CommentRepository;
 import md.pbl.project.boardtaskapi.repository.TaskRepository;
 import org.springframework.http.HttpStatus;
@@ -44,10 +43,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto create(CommentDto dto) throws PblCustomException {
-        Task task = taskRepo.findById(dto.getTaskId())
+        taskRepo.findById(dto.getTaskId())
                 .orElseThrow(() -> new PblCustomException("Task does not exist", ErrorCode.TASK_DOESNT_EXIST, HttpStatus.NOT_FOUND));
         Comment entity = mapper.toEntity(dto);
-        entity.setTask(task);
         return mapper.toDto(commentRepo.save(entity));
     }
 

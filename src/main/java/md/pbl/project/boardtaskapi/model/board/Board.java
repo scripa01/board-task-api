@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import md.pbl.project.boardtaskapi.model.task.Task;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,7 @@ public class Board {
     private String description;
     private Long organizationId;
     private Long projectId;
+    private OffsetDateTime createdAt;
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 }
