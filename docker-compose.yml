@@ -13,8 +13,9 @@ services:
       - board-db-data:/var/lib/postgresql/data
 
   board-task-api:
+    image: board-task-api
     build:
-      context: ./board-task-api
+      context: .
     container_name: board-task-api
     depends_on:
       - board-db
