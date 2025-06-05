@@ -11,6 +11,8 @@ services:
       - "5433:5432"
     volumes:
       - board-db-data:/var/lib/postgresql/data
+    networks:
+      - backend-net
 
   board-task-api:
     image: board-task-api
@@ -25,6 +27,12 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://board-db:5432/board-task
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123456789
+    networks:
+      - backend-net
 
 volumes:
   board-db-data:
+
+networks:
+  backend-net:
+    external: true
