@@ -17,5 +17,5 @@ public class BoardDto {
     private String description;
     private Long organizationId;
     private Long projectId;
-    OffsetDateTime createdAt = OffsetDateTime.now();
+    private OffsetDateTime createdAt;
 }

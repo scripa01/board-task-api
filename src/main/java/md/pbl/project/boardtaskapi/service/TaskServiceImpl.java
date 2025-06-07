@@ -77,6 +77,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto update(Long id, TaskDto dto) throws PblCustomException {
         Task entity = taskRepo.findById(id)
                 .orElseThrow(() -> new PblCustomException("Task does not exist", ErrorCode.TASK_DOESNT_EXIST, HttpStatus.NOT_FOUND));
+        dto.setUpdatedAt(OffsetDateTime.now());
         mapper.updateEntityFromDto(dto, entity);
         taskAuditService.record(entity, dto.getCreatedByUserId(), entity.getStatus(), entity.getStatus(), "Update Task");
         return mapper.toDto(taskRepo.save(entity));
